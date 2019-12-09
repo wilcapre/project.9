@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       set(value) {
         if (value !== '' && value !== null) {
+          // hashes the user's password before persisting the user to the database
           this.setDataValue('password', bcryptjs.hashSync(value))
         }
       },

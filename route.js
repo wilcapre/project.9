@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('basic-auth');
-const db = require('./models');
+const sequelize = require('./models').sequelize;
 const User = require('./models').User; 
 const Course = require('./models').Course;
 const bcryptjs = require('bcryptjs');
 
-//  courses an array
-const courses = [];
+sequelize
+  .authenticate()
+  .then(function(err) {
+    console.log('Database connection has been established successfully.');
+  })
+  .catch(function (err) {
+    console.log('Unable to connect to the database:', err);
+  });
 
 // AsyncHandler function to wrap the routes
 function asyncHandler(cb) {
