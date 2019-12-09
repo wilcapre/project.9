@@ -107,7 +107,8 @@ router.get('/courses', asyncHandler (async (req,res) => {
     try{
         const courses = await Course.findAll({
             order: [["id", "ASC"]],
-            attributes: ['id', 'userId','title', 'description', 'estimatedTime', 'materialsNeeded'] 
+            attributes: ['id', 'userId','title', 'description', 'estimatedTime', 'materialsNeeded'],
+            include: [{ model: User, attributes: ['firstName', 'lastName', 'emailAddress']}] 
         });
         res.status(200).json(courses);
     } catch(err){
@@ -116,24 +117,22 @@ router.get('/courses', asyncHandler (async (req,res) => {
 }));
 
 // GET course route by ID 
-router.get('/courses/:id', asyncHandler(async (req, res, next) => {
+router.get('/courses/:id', async (req, res, next) => {
     try{
-    const courses = await Course.findOne({
-        where: {
-            id: req.params.id
-        },
-        attributes: ['id', 'userId','title', 'description', 'estimatedTime', 'materialsNeeded'] 
+    const courses = await Course.findByPk(req.params.id, {
+        attributes: ['id', 'userId','title', 'description', 'estimatedTime', 'materialsNeeded'],
+        include: [{ model: User, attributes: ['firstName', 'lastName', 'emailAddress']}]  
     })
     if(courses) {
         res.status(200).json(courses); 
     } else {
-        const error = new Error("Course Doesn't Exist");
-        throw error;
+        res.status(404).json({error: 'Course does not exist'})
     }  
 } catch(err){
-    res.status(404).json({message: err.message});
+    return next(err);
 }
-}));
+});
+
 
 // POST Course Route
 router.post('/courses', authenticateUser, asyncHandler (async (req, res) => {
