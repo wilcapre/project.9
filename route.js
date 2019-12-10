@@ -141,8 +141,9 @@ router.get('/courses/:id', async (req, res, next) => {
 
 
 // POST Course Route
-router.post('/courses', authenticateUser, asyncHandler (async (req, res) => {
+router.post('/courses', authenticateUser, asyncHandler (async (req, res, next) => {
     try{ 
+        req.body.userId = req.currentUser.id
         const course = await Course.create(req.body); 
         res.location('/courses/' + course.id);
         res.status(201).end(); 
