@@ -32,12 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     estimatedTime:{
-     type: DataTypes.STRING,
-     allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     materialsNeeded: {
-    type: DataTypes.STRING,
-    allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: true,
     }
   }, {});
   Course.associate = function(models) {
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     Course.belongsTo(models.User, {
       foreignKey: {
         fieldName: 'userId',
-        allowNull: false,
+       allowNull: false,
       },
     });
   };
